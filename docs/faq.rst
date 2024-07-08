@@ -54,3 +54,9 @@ If all messages that look like this "Frame found: type 02, data: 6D 01 ..." are 
 
 **A:** On AC side there is a conector ususally marked as CN34 or CN35 it is a 4 pin connector with pins marked as RXD, TXD, GND, +5V. 
 It is 4 pin 5264 molex connector. On ESP side used USB Type-A connector (it is not real USB just UART with USB connector) or JST SM04B-GHS-TB connector.
+
+**Q:** Can I use ESP8266 with this component for my Haier AC?
+-------------------------------------------------------------
+
+**A:** ESP8266 is powerful enough to handle communication with Haier AC. But it has limited resources and in case you also
+want some advanced features of ESPHome such as web_server, mqtt, etc. it may not be enough. It is recommended to use ESP32.
