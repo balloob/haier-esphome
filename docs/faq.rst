@@ -62,12 +62,21 @@ These simulators are compatible with Windows and Linux.
 **Q:** I am seeing the warning "Answer handler error, msg=01, answ=03, err=7". What should I do?
 ************************************************************************************************
 
-**A:** This warning means that the AC denied the control command. It can happen in two cases: either the AC is using a different type of control or the structure of the status packet is different. You can try using the `control_method: SET_SINGLE_PARAMETER`. If that doesn't help, you can try to figure out the size of different parts of the status packet using this method: `Haier protocol overview <./docs/protocol_overview.rst>`. If nothing helps, you can create an issue on GitHub.
+**A:** This warning means that the AC denied the control command. It can happen in two cases: either the AC is using a different type of control or the structure of the status packet is different. You can try using the `control_method: SET_SINGLE_PARAMETER`. If that doesn't help, you can try to figure out the size of different parts of the status packet using this method: `Haier protocol overview <./docs/protocol_overview.rst>`_. If nothing helps, you can create an issue on GitHub.
+
+**Q:** What does the "Unsupported message received: type xx" message in the logs indicate?
+*******************************************************************************************
+
+**A:** This message may appear for several reasons:
+
+1. **Slow AC Response:** Your AC unit is responding slowly to requests, consider increasing the `response_timeout` parameter from its default value of 200 ms to 400 ms.
+2. **Overloaded ESP:** Your ESP module is too busy to process messages in time, increasing `response_timeout` won't resolve the issue. Instead, try disabling some components, lowering the log level, or upgrading to a more powerful ESP board.
+3. **Unrecognized Messages:** Your AC might be sending new types of messages that the component does not recognize. If adjusting the timeout and optimizing ESP performance don't help, capture the logs and create an issue on GitHub for further assistance.
 
 **Q:** My ESP is communicating with the AC, but I can't control it. Or I can control it, but my sensors show the wrong information.
 ***********************************************************************************************************************************
 
-**A:** Most likely, you have one of two problems: either the wrong control method or the wrong status packet structure. You can try using the `control_method: SET_SINGLE_PARAMETER`. If that doesn't help, you can try to figure out the size of different parts of the status packet using this method: `Haier protocol overview <./docs/protocol_overview.rst>`.
+**A:** Most likely, you have one of two problems: either the wrong control method or the wrong status packet structure. You can try using the `control_method: SET_SINGLE_PARAMETER`. If that doesn't help, you can try to figure out the size of different parts of the status packet using this method: `Haier protocol overview <./docs/protocol_overview.rst>`_.
 
 **Q:** Can I use ESP8266 with this component for my Haier AC?
 *************************************************************
