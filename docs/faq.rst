@@ -21,6 +21,53 @@ Compatibility and Support
 
 **A:** On AC side there is a conector ususally marked as CN34 or CN35 it is a 4 pin connector with pins marked as RXD, TXD, GND, +5V. It is 4 pin 5264 molex connector. On ESP side used USB Type-A connector (it is not real USB just UART with USB connector) or JST SM04B-GHS-TB connector.
 
+**Q:** Can I use ESP8266 with this component for my Haier AC?
+*************************************************************
+
+**A:** ESP8266 is powerful enough to handle communication with Haier AC. But it has limited resources and in case you also want some advanced features of ESPHome such as web_server, mqtt, etc. it may not be enough. It is recommended to use ESP32.
+
+**Q:** Can I use an ESP board with a USB Type-A connector for my Haier AC that has a USB Type-A port?
+*****************************************************************************************************
+
+**A:** The USB Type-A port on your Haier AC operates using UART protocol, not standard USB communication. Most ESP32 modules use a separate chip (like CP2102 or CH340) for USB communication, which only supports USB protocol and cannot interface with UART protocol directly. Therefore, these cannot communicate with your AC's UART-over-USB Type-A port.
+
+However, ESP modules equipped with the ESP32-S3 chip have native USB support and can potentially communicate using UART protocol if the USB Type-A connector is directly connected to the ESP pins without an intermediary chip. This setup allows for creating an ESPHome configuration that utilizes the same pins for UART communication.
+
+Currently, the `M5Stack AtomS3U <https://shop.m5stack.com/products/atoms3u>`_ is one confirmed board that supports this configuration, though there may be others.
+
+**Sample ESPHome Configuration for M5Stack AtomS3U:**
+
+.. code-block:: yaml
+
+    esphome:
+      name: haier
+      platformio_options:
+        board_build.flash_mode: dio
+
+    esp32:
+      board: esp32-s3-devkitc-1
+      framework:
+        type: arduino
+
+    wifi:
+      ssid: !secret wifi_ssid
+      password: !secret wifi_password
+
+    uart:
+      baud_rate: 9600
+      tx_pin: 19
+      rx_pin: 20
+
+    logger:
+      level: WARN
+
+    climate:
+      - platform: haier
+        name: Haier AC
+    
+This configuration is a starting point for integrating your Haier AC with an ESP32-S3 based board.
+
+
 Troubleshooting
 ---------------
 
@@ -77,11 +124,6 @@ These simulators are compatible with Windows and Linux.
 ***********************************************************************************************************************************
 
 **A:** Most likely, you have one of two problems: either the wrong control method or the wrong status packet structure. You can try using the `control_method: SET_SINGLE_PARAMETER`. If that doesn't help, you can try to figure out the size of different parts of the status packet using this method: `Haier protocol overview <./docs/protocol_overview.rst>`_.
-
-**Q:** Can I use ESP8266 with this component for my Haier AC?
-*************************************************************
-
-**A:** ESP8266 is powerful enough to handle communication with Haier AC. But it has limited resources and in case you also want some advanced features of ESPHome such as web_server, mqtt, etc. it may not be enough. It is recommended to use ESP32.
 
 Feature Requests
 ----------------
